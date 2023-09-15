@@ -215,7 +215,7 @@ class Bootstrapper:
             bool: True if version chooser is online, False otherwise.
         """
         try:
-            response = requests.get("http://localhost/version-chooser/v1.0/version/current", timeout=10)
+            response = requests.get("http://localhost:2770/version-chooser/v1.0/version/current", timeout=10)
             if Bootstrapper.SETTINGS_NAME_CORE in response.json()["repository"]:
                 return True
         except Exception as e:
