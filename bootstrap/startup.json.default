@@ -1,7 +1,7 @@
 {
     "core": {
-        "tag": "factory",
-        "image": "bluerobotics/blueos-core",
+        "tag": "master",
+        "image": "gaojulong/blueos-core",
         "enabled": true,
         "webui": false,
         "network": "host",
