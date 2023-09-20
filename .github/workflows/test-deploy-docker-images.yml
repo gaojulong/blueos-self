@@ -1,4 +1,4 @@
-name: Test, Build and Deploy Images 2
+name: Test Images 2
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
