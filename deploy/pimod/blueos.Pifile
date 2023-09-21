@@ -17,8 +17,8 @@ RUN bash -c '
   sed -i 's/factory/$VERSION/g' /root/.config/blueos/bootstrap/startup.json
 '
 
-RUN bash -c '
-  curl -O https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$VERSION/install/install.sh
-  chmod +x install.sh
-  ./install.sh --ci-run
-'
+#RUN bash -c '
+#  curl -O https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$VERSION/install/install.sh
+#  chmod +x install.sh
+#  ./install.sh --ci-run
+#'
