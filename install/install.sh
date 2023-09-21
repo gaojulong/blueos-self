@@ -15,7 +15,7 @@ BLUEOS_FACTORY="gaojulong/blueos-core:factory" # used for "factory reset"
 alias curl="curl --retry 6 --max-time 15 --retry-all-errors"
 
 # Additional options
-DO_BOARD_CONFIG=1 # default to do the board config
+DO_BOARD_CONFIG=0 # default to do the board config
 RUNNING_IN_CI=0 # default to not running CI mode/docker-in-docker
 
 usage_help()
