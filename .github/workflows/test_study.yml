@@ -23,6 +23,6 @@ jobs:
           submodules: recursive
       - name: Test
         run: |
-          $PWD 
+          ls 
           ls
         
