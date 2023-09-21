@@ -248,69 +248,69 @@ jobs:
           prerelease: true
           file_glob: true
 
-  deploy-raspberry-image:
-    needs: deploy-docker-images
-    if: github.event_name != 'pull_request'
-    runs-on: self-hosted
-    # The runner for this job is a Raspberry Pi OS Bullseye.
-    # Just install docker (curl -sSL https://get.docker.com/ | sh) and follow the instructions for setting up a new runner in
-    # https://github.com/bluerobotics/BlueOS-docker/settings/actions/runners/new
+  # deploy-raspberry-image:
+  #   needs: deploy-docker-images
+  #   if: github.event_name != 'pull_request'
+  #   runs-on: self-hosted
+  #   # The runner for this job is a Raspberry Pi OS Bullseye.
+  #   # Just install docker (curl -sSL https://get.docker.com/ | sh) and follow the instructions for setting up a new runner in
+  #   # https://github.com/bluerobotics/BlueOS-docker/settings/actions/runners/new
 
-    strategy:
-      matrix:
-        platforms: ["linux/arm/v7"]
-    steps:
-      - name: Install git
-        run: sudo apt install -y git
+  #   strategy:
+  #     matrix:
+  #       platforms: ["linux/arm/v7"]
+  #   steps:
+  #     - name: Install git
+  #       run: sudo apt install -y git
 
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         submodules: recursive
 
 
-      # We use our own pimod as upstream doesn't provide armv7 images
-      - name: Pimod Build
-        run: |
-          VERSION=$GITHUB_REPOSITORY
-          VERSION=${VERSION:-master}
-          wget https://raw.githubusercontent.com/williangalvani/pimod/master/pimod.sh && chmod +x pimod.sh
-          docker run --rm --privileged \
-            -v $PWD:/files \
-            -e PATH=/pimod:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-            -e GITHUB_REPOSITORY=$GITHUB_REPOSITORY \
-            -e VERSION=$GITHUB_REF_NAME \
-            --workdir=/files \
-            --platform ${{ matrix.platforms }} williangalvani/pimod:latest pimod.sh deploy/pimod/blueos.Pifile
+  #     # We use our own pimod as upstream doesn't provide armv7 images
+  #     - name: Pimod Build
+  #       run: |
+  #         VERSION=$GITHUB_REPOSITORY
+  #         VERSION=${VERSION:-master}
+  #         wget https://raw.githubusercontent.com/williangalvani/pimod/master/pimod.sh && chmod +x pimod.sh
+  #         docker run --rm --privileged \
+  #           -v $PWD:/files \
+  #           -e PATH=/pimod:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+  #           -e GITHUB_REPOSITORY=$GITHUB_REPOSITORY \
+  #           -e VERSION=$GITHUB_REF_NAME \
+  #           --workdir=/files \
+  #           --platform ${{ matrix.platforms }} williangalvani/pimod:latest pimod.sh deploy/pimod/blueos.Pifile
 
-      # TODO: add GITHUB_REF_NAME after https://github.com/actions/upload-artifact/issues/231 is fixed
-      # name: blueos-${{ env.GITHUB_REF_NAME }}.zip
-      - name: Zip image
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          sudo apt install zip
-          zip BlueOS-raspberry.zip deploy/pimod/blueos.img
+  #     # TODO: add GITHUB_REF_NAME after https://github.com/actions/upload-artifact/issues/231 is fixed
+  #     # name: blueos-${{ env.GITHUB_REF_NAME }}.zip
+  #     - name: Zip image
+  #       if: startsWith(github.ref, 'refs/tags/')
+  #       run: |
+  #         sudo apt install zip
+  #         zip BlueOS-raspberry.zip deploy/pimod/blueos.img
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          # We use the .img to avoid a zip of a zip
-          name: BlueOS-raspberry.zip
-          path: deploy/pimod/blueos.img
-          if-no-files-found: error
-          retention-days: 7
+  #     - name: Upload artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         # We use the .img to avoid a zip of a zip
+  #         name: BlueOS-raspberry.zip
+  #         path: deploy/pimod/blueos.img
+  #         if-no-files-found: error
+  #         retention-days: 7
 
-      - name: Upload raspberry image for release
-        uses: svenstaro/upload-release-action@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: BlueOS-raspberry.zip
-          tag: ${{ github.ref }}
-          overwrite: true
-          prerelease: true
+  #     - name: Upload raspberry image for release
+  #       uses: svenstaro/upload-release-action@v2
+  #       if: startsWith(github.ref, 'refs/tags/')
+  #       with:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         file: BlueOS-raspberry.zip
+  #         tag: ${{ github.ref }}
+  #         overwrite: true
+  #         prerelease: true
 
-      # This is required because docker has root permissions, which means the runner is unable to clear this cache normally
-      - name: Cleanup
-        if: ${{ always() }}
-        run: sudo rm -rf .cache
+  #     # This is required because docker has root permissions, which means the runner is unable to clear this cache normally
+  #     - name: Cleanup
+  #       if: ${{ always() }}
+  #       run: sudo rm -rf .cache
