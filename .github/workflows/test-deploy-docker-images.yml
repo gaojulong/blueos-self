@@ -274,14 +274,14 @@ jobs:
         run: |
           VERSION=$GITHUB_REPOSITORY
           VERSION=${VERSION:-master}
-          wget https://raw.githubusercontent.com/nature40/pimod/master/pimod.sh && chmod +x pimod.sh
+          wget https://raw.githubusercontent.com/williangalvani/pimod/master/pimod.sh && chmod +x pimod.sh
           docker run --rm --privileged \
             -v $PWD:/files \
             -e PATH=/pimod:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
             -e GITHUB_REPOSITORY=gaojulong/blueos-self \
             -e VERSION=alpha \
             --workdir=/files \
-            williangalvani/pimod:latest pimod.sh deploy/pimod/blueos.Pifile
+            nature40/pimod:latest pimod.sh deploy/pimod/blueos.Pifile
 
       # TODO: add GITHUB_REF_NAME after https://github.com/actions/upload-artifact/issues/231 is fixed
       # name: blueos-${{ env.GITHUB_REF_NAME }}.zip
