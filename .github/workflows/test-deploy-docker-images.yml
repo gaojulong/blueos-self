@@ -281,7 +281,7 @@ jobs:
             -e GITHUB_REPOSITORY=gaojulong/blueos-self \
             -e VERSION=alpha \
             --workdir=/files \
-            --platform ${{ matrix.platforms }} williangalvani/pimod:latest pimod.sh deploy/pimod/blueos.Pifile
+            williangalvani/pimod:latest pimod.sh deploy/pimod/blueos.Pifile
 
       # TODO: add GITHUB_REF_NAME after https://github.com/actions/upload-artifact/issues/231 is fixed
       # name: blueos-${{ env.GITHUB_REF_NAME }}.zip
